@@ -1,12 +1,23 @@
 import tkinter as tk
 from tkinter import messagebox
 
+# Task class definition
+class Task:
+    def __init__(self, description):
+        self.description = description
+        self.completed = False
+
+    def __str__(self):
+        return self.description
+
+    def mark_completed(self):
+        self.completed = True
+
 # Load tasks from file
 def load_tasks(filename):
     try:
         with open(filename, 'r') as file:
-            tasks = [line.strip() for line in file.readlines()]
-        return tasks
+            return [Task(line.strip()) for line in file.readlines()]
     except FileNotFoundError:
         return []
 
@@ -14,14 +25,16 @@ def load_tasks(filename):
 def save_tasks(filename, tasks):
     with open(filename, 'w') as file:
         for task in tasks:
-            file.write(task + '\n')
+            if not task.completed:
+                file.write(f"{task}\n")
 
 # Add task
 def add_task():
-    task = task_entry.get()
-    if task:
+    task_description = task_entry.get()
+    if task_description:
+        task = Task(task_description)
         tasks.append(task)
-        task_listbox.insert(tk.END, task)
+        task_listbox.insert(tk.END, task.description)
         task_entry.delete(0, tk.END)
     else:
         messagebox.showwarning("Input Error", "Please enter a task.")
@@ -30,8 +43,9 @@ def add_task():
 def complete_task():
     selected_task_index = task_listbox.curselection()
     if selected_task_index:
+        task = tasks[selected_task_index[0]]
+        task.mark_completed()
         task_listbox.delete(selected_task_index)
-        tasks.pop(selected_task_index[0])
     else:
         messagebox.showwarning("Selection Error", "Please select a task to complete.")
 
@@ -66,7 +80,7 @@ task_listbox.pack(pady=10)
 
 # Populate the list box with tasks
 for task in tasks:
-    task_listbox.insert(tk.END, task)
+    task_listbox.insert(tk.END, task.description)
 
 # Complete task button
 complete_task_button = tk.Button(app, text="Complete Task", command=complete_task)
