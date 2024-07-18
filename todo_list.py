@@ -1,36 +1,7 @@
-def main():
-    filename = 'tasks.txt'
-    tasks = load_tasks(filename)
+import tkinter as tk
+from tkinter import messagebox
 
-    while True:
-        print("\nTo-Do List:")
-        display_tasks(tasks)
-        
-        print("\nOptions:")
-        print("1. Add Task")
-        print("2. Mark Task as Completed")
-        print("3. Delete Task")
-        print("4. Exit")
-        
-        choice = input("Enter your choice: ")
-
-        if choice == '1':
-            task = input("Enter a new task: ")
-            add_task(tasks, task)
-        elif choice == '2':
-            task_number = int(input("Enter the task number to mark as completed: "))
-            mark_task_completed(tasks, task_number)
-        elif choice == '3':
-            task_number = int(input("Enter the task number to delete: "))
-            delete_task(tasks, task_number)
-        elif choice == '4':
-            save_tasks(filename, tasks)
-            print("Goodbye!")
-            break
-        else:
-            print("Invalid choice. Please try again.")
-
-# Function to load tasks from a file
+# Load tasks from file
 def load_tasks(filename):
     try:
         with open(filename, 'r') as file:
@@ -39,41 +10,78 @@ def load_tasks(filename):
     except FileNotFoundError:
         return []
 
-# Function to save tasks to a file
+# Save tasks to file
 def save_tasks(filename, tasks):
     with open(filename, 'w') as file:
         for task in tasks:
             file.write(task + '\n')
 
-# Function to display tasks
-def display_tasks(tasks):
-    if not tasks:
-        print("No tasks found.")
+# Add task
+def add_task():
+    task = task_entry.get()
+    if task:
+        tasks.append(task)
+        task_listbox.insert(tk.END, task)
+        task_entry.delete(0, tk.END)
     else:
-        for idx, task in enumerate(tasks, start=1):
-            print(f"{idx}. {task}")
+        messagebox.showwarning("Input Error", "Please enter a task.")
 
-# Function to add a new task
-def add_task(tasks, task):
-    tasks.append(task)
-    print(f"Task '{task}' added.")
-
-# Function to mark a task as completed
-def mark_task_completed(tasks, task_number):
-    if 0 < task_number <= len(tasks):
-        task = tasks.pop(task_number - 1)
-        print(f"Task '{task}' completed.")
+# Mark task as completed
+def complete_task():
+    selected_task_index = task_listbox.curselection()
+    if selected_task_index:
+        task_listbox.delete(selected_task_index)
+        tasks.pop(selected_task_index[0])
     else:
-        print("Invalid task number.")
+        messagebox.showwarning("Selection Error", "Please select a task to complete.")
 
-# Function to delete a task
-def delete_task(tasks, task_number):
-    if 0 < task_number <= len(tasks):
-        task = tasks.pop(task_number - 1)
-        print(f"Task '{task}' deleted.")
+# Delete task
+def delete_task():
+    selected_task_index = task_listbox.curselection()
+    if selected_task_index:
+        task_listbox.delete(selected_task_index)
+        tasks.pop(selected_task_index[0])
     else:
-        print("Invalid task number.")
+        messagebox.showwarning("Selection Error", "Please select a task to delete.")
 
+# Create the main window
+app = tk.Tk()
+app.title("To-Do List")
 
-if __name__ == '__main__':
-    main()
+# Load tasks
+filename = 'tasks.txt'
+tasks = load_tasks(filename)
+
+# Task entry
+task_entry = tk.Entry(app, width=50)
+task_entry.pack(pady=10)
+
+# Add task button
+add_task_button = tk.Button(app, text="Add Task", command=add_task)
+add_task_button.pack(pady=5)
+
+# Task list box
+task_listbox = tk.Listbox(app, width=50, height=10)
+task_listbox.pack(pady=10)
+
+# Populate the list box with tasks
+for task in tasks:
+    task_listbox.insert(tk.END, task)
+
+# Complete task button
+complete_task_button = tk.Button(app, text="Complete Task", command=complete_task)
+complete_task_button.pack(pady=5)
+
+# Delete task button
+delete_task_button = tk.Button(app, text="Delete Task", command=delete_task)
+delete_task_button.pack(pady=5)
+
+# Save tasks on exit
+def on_closing():
+    save_tasks(filename, tasks)
+    app.destroy()
+
+app.protocol("WM_DELETE_WINDOW", on_closing)
+
+# Start the main loop
+app.mainloop()
