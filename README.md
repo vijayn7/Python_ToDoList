@@ -1,24 +1,24 @@
-Certainly! Here's a basic README template for your To-Do List Application project:
+Certainly! Here’s an updated version of the README to reflect the changes made to the project by introducing the `Task` class and the Tkinter GUI.
 
 ---
 
 # To-Do List Application
 
-This Python project implements a simple command-line To-Do List Application. It allows users to add, view, mark as completed, and delete tasks. Tasks are saved to a file for persistence between sessions.
+This Python project is a simple GUI-based To-Do List Application using Tkinter. It allows users to manage tasks by adding, viewing, completing, and deleting them. The tasks are stored in a file for persistence.
 
 ## Features
 
-- Add new tasks to the list.
-- View existing tasks with their numbers.
-- Mark tasks as completed and remove them from the list.
-- Delete tasks from the list.
-- Automatically saves tasks to a file (`tasks.txt`) upon exit and loads them at startup.
+- **Add Tasks**: Easily add new tasks using the input field and the "Add Task" button.
+- **View Tasks**: All tasks are displayed in a list box.
+- **Complete Tasks**: Select a task and mark it as completed, which removes it from the list.
+- **Delete Tasks**: Remove tasks from the list without marking them as completed.
+- **Persistent Storage**: Tasks are saved to a file (`tasks.txt`) on exit and loaded at startup.
 
 ## Getting Started
 
 ### Prerequisites
 
-- Python 3.x installed on your system.
+- Python 3.x with Tkinter installed (usually included with Python).
 
 ### Installing
 
@@ -41,17 +41,33 @@ This Python project implements a simple command-line To-Do List Application. It 
 2. Run the main Python file.
 
    ```bash
-   python todo_list.py
+   python todo_list_gui.py
    ```
 
-3. Follow the on-screen instructions to interact with the application.
+3. Use the GUI to add, complete, or delete tasks.
 
 ## Usage
 
-- **Adding a Task**: Enter a new task when prompted.
-- **Marking a Task as Completed**: Enter the number of the task to mark as completed.
-- **Deleting a Task**: Enter the number of the task to delete from the list.
-- **Exiting the Application**: Choose the option to exit; tasks will be automatically saved.
+- **Add a Task**: Enter the task description in the input field and click "Add Task."
+- **Complete a Task**: Select a task from the list and click "Complete Task" to mark it as completed.
+- **Delete a Task**: Select a task from the list and click "Delete Task" to remove it.
+- **Exit**: Closing the window will save all uncompleted tasks automatically.
+
+## Code Overview
+
+### Task Class
+
+- **Description**: Encapsulates task-related data and behaviors.
+- **Attributes**: 
+  - `description` (str): The text of the task.
+  - `completed` (bool): Status indicating if the task is completed.
+
+### Main Components
+
+- **Entry Widget**: For task input.
+- **Listbox Widget**: Displays tasks.
+- **Buttons**: For adding, completing, and deleting tasks.
+- **Messagebox**: For error and confirmation messages.
 
 ## Contributing
 
@@ -61,10 +77,6 @@ Contributions are welcome! Please fork the repository and submit a pull request 
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Acknowledgments
-
-- Inspiration and initial guidance from [OpenAI ChatGPT](https://www.openai.com).
-
 ---
 
-Feel free to customize this README further based on additional features or specific instructions you want to highlight for users and contributors.
+Feel free to add or modify any sections based on specific details or additional features you want to highlight in your project.
